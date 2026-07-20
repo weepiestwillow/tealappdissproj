@@ -2,13 +2,16 @@ library(teal)
 library(teal.modules.general)
 library(random.cdisc.data)
 library(teal.modules.clinical)
+library(labelled)
 
-set.seed(314)
+set.seed(314) #Fixed seed data generation to enable code reproducibility functions
 ADSL <- radsl()
 ADAE <- radae(ADSL)
 ADTTE <- radtte(ADSL)
 
-data <- teal_data(
+var_label(ADSL$AGE) <- "Age of Subject"
+
+data <- teal_data( #Assigning datasets to a teal data object with reproducible code
   ADSL = ADSL,
   ADAE = ADAE,
   ADTTE = ADTTE,
@@ -18,17 +21,22 @@ data <- teal_data(
   ADSL <- radsl()
   ADAE <- radae(ADSL)
   ADTTE <- radtte(ADSL)
+  
+  var_label(ADSL$AGE) <- \"Age of Subject\" 
   "
+  
 )
 
-data <- verify(data)
+data <- verify(data) #Verification of data
 
 app <- init(
   data = data,
   modules = modules(
-    tm_variable_browser(
+    ## Variable browser module for oversight of data##
+    tm_variable_browser( 
       label = "Data Overview"
     ),
+    ## Pre-built Kaplan-Meier plot module ##
     tm_g_km(
       label = "Kaplan Meier plot",
       dataname = "ADTTE",
