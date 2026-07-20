@@ -19,4 +19,6 @@ app <- init(
   )
 )
 
+#hello world
+
 shinyApp(app$ui, app$server)
