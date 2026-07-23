@@ -10,6 +10,14 @@ ADAE <- radae(ADSL)
 ADCM <- radcm(ADSL)
 ADTTE <- radtte(ADSL)
 
+ADCM <- ADCM %>%
+  rename(
+    CM_ASTDTM = ASTDTM,
+    CM_AENDTM = AENDTM,
+    CM_ASTDY  = ASTDY,
+    CM_AENDY  = AENDY
+  )
+
 var_label(ADSL$AGE) <- "Age of Patient"
 
 data <- teal_data( #Assigning datasets to a teal data object with reproducible code
@@ -24,6 +32,14 @@ data <- teal_data( #Assigning datasets to a teal data object with reproducible c
   ADAE <- radae(ADSL)
   ADCM <- radcm(ADSL)
   ADTTE <- radtte(ADSL)
+  
+  ADCM <- ADCM %>%
+  rename(
+    CM_ASTDTM = ASTDTM,
+    CM_AENDTM = AENDTM,
+    CM_ASTDY  = ASTDY,
+    CM_AENDY  = AENDY
+  )
   
   var_label(ADSL$AGE) <- \"Age of Patient\" 
   "
@@ -69,7 +85,7 @@ app <- init(
         selected = "SEX"
       )
     ),
-    
+    ##per-patient basic info module##
     tm_t_pp_basic_info(
       label = "Individual Patient Overview",
       dataname = "ADSL",
@@ -78,9 +94,65 @@ app <- init(
         choices = variable_choices(data[["ADSL"]]),
         selected = c("ARM", "AGE", "SEX", "RACE", "ETHNIC", "COUNTRY")
       )
+    ),
+    
+    tm_g_pp_patient_timeline(
+      label = "Patient Timeline",
+      dataname_adcm = "ADCM",
+      dataname_adae = "ADAE",
+      parentname = "ADSL",
+      patient_col = "USUBJID",
+      
+      aeterm = choices_selected(
+        choices = variable_choices(data[["ADAE"]], "AETERM"),
+        selected = c("AETERM")
+      ), #Temporarily pasted from the documentation to fill out
+      
+      cmdecod = choices_selected(
+        choices = variable_choices(data[["ADCM"]], "CMDECOD"),
+        selected = c("CMDECOD")
+      ),
+      
+      aetime_start = choices_selected(
+        choices = variable_choices(data[["ADAE"]], "ASTDTM"),
+        selected = c("ASTDTM")
+      ),
+      
+      aetime_end = choices_selected(
+        choices = variable_choices(data[["ADAE"]], "AENDTM"),
+        selected = c("AENDTM")
+      ),
+      
+      dstime_start = choices_selected(
+        choices = variable_choices(data[["ADCM"]], "CM_ASTDTM"),
+        selected = c("CM_ASTDTM")
+      ),
+      
+      dstime_end = choices_selected(
+        choices = variable_choices(data[["ADCM"]], "CM_AENDTM"),
+        selected = c("CM_AENDTM")
+      ),
+      
+      aerelday_start = choices_selected(
+        choices = variable_choices(data[["ADAE"]], "ASTDY"),
+        selected = c("ASTDY")
+      ),
+      
+      aerelday_end = choices_selected(
+        choices = variable_choices(data[["ADAE"]], "AENDY"),
+        selected = c("AENDY")
+      ),
+      
+      dsrelday_start = choices_selected(
+        choices = variable_choices(data[["ADCM"]], "CM_ASTDY"),
+        selected = c("CM_ASTDY")
+      ),
+      
+      dsrelday_end = choices_selected(
+        choices = variable_choices(data[["ADCM"]], "CM_AENDY"),
+        selected = c("CM_AENDY")
+      )
     )
-    
-    
     
     
     
