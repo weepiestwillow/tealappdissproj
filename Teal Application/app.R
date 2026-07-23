@@ -7,22 +7,25 @@ library(labelled)
 set.seed(314) #Fixed seed data generation to enable code reproducibility functions
 ADSL <- radsl()
 ADAE <- radae(ADSL)
+ADCM <- radcm(ADSL)
 ADTTE <- radtte(ADSL)
 
-var_label(ADSL$AGE) <- "Age of Subject"
+var_label(ADSL$AGE) <- "Age of Patient"
 
 data <- teal_data( #Assigning datasets to a teal data object with reproducible code
   ADSL = ADSL,
   ADAE = ADAE,
+  ADCM = ADCM,
   ADTTE = ADTTE,
   join_keys = default_cdisc_join_keys,
   code = "
   set.seed(314)
   ADSL <- radsl()
   ADAE <- radae(ADSL)
+  ADCM <- radcm(ADSL)
   ADTTE <- radtte(ADSL)
   
-  var_label(ADSL$AGE) <- \"Age of Subject\" 
+  var_label(ADSL$AGE) <- \"Age of Patient\" 
   "
   
 )
@@ -65,7 +68,24 @@ app <- init(
         choices = variable_choices(data[["ADSL"]], c("SEX", "RACE")),
         selected = "SEX"
       )
+    ),
+    
+    tm_t_pp_basic_info(
+      label = "Individual Patient Overview",
+      dataname = "ADSL",
+      patient_col = "USUBJID",
+      vars = choices_selected(
+        choices = variable_choices(data[["ADSL"]]),
+        selected = c("ARM", "AGE", "SEX", "RACE", "ETHNIC", "COUNTRY")
+      )
     )
+    
+    
+    
+    
+    
+    
+    
   )
 )
 
