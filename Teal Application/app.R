@@ -3,6 +3,7 @@ library(teal.modules.general)
 library(random.cdisc.data)
 library(teal.modules.clinical)
 library(labelled)
+library(dplyr)
 
 set.seed(314) #Fixed seed data generation to enable code reproducibility functions
 ADSL <- radsl()
@@ -45,6 +46,7 @@ data <- teal_data( #Assigning datasets to a teal data object with reproducible c
   "
   
 )
+
 
 data <- verify(data) #Verification of data
 
