@@ -10,7 +10,7 @@ ADAE <- radae(ADSL)
 ADCM <- radcm(ADSL)
 ADTTE <- radtte(ADSL)
 
-ADCM <- ADCM %>%
+ADCM <- ADCM %>% #required renaming of variables to prevent naming conflicts in patient timeline module
   rename(
     CM_ASTDTM = ASTDTM,
     CM_AENDTM = AENDTM,
@@ -95,7 +95,7 @@ app <- init(
         selected = c("ARM", "AGE", "SEX", "RACE", "ETHNIC", "COUNTRY")
       )
     ),
-    
+    ##Per-patient treatment timeline##
     tm_g_pp_patient_timeline(
       label = "Patient Timeline",
       dataname_adcm = "ADCM",
@@ -106,7 +106,7 @@ app <- init(
       aeterm = choices_selected(
         choices = variable_choices(data[["ADAE"]], "AETERM"),
         selected = c("AETERM")
-      ), #Temporarily pasted from the documentation to fill out
+      ), 
       
       cmdecod = choices_selected(
         choices = variable_choices(data[["ADCM"]], "CMDECOD"),
